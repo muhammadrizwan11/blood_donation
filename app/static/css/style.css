@@ -1,0 +1,11 @@
+/* Custom styles for Blood Donation System */
+.navbar-brand {
+    font-weight: bold;
+}
+
+.btn-custom {
+    border-radius: 25px;
+    padding: 8px 20px;
+}
+
+/* Add any additional custom styles here */
