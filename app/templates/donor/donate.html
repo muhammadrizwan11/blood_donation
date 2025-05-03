@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}Donate Blood{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-blood text-white">
+                <h3 class="mb-0">Blood Donation Form</h3>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle mr-2"></i>
+                    Your blood type is <strong>{{ current_user.blood_type }}</strong>
+                </div>
+
+                <form method="POST" action="{{ url_for('donor.donate') }}">
+                    <div class="form-group">
+                        <label for="quantity">Donation Amount (ml)</label>
+                        <input type="number" class="form-control" id="quantity" name="quantity" 
+                               min="{{ config.MINIMUM_DONATION_ML }}" 
+                               max="{{ config.MAXIMUM_DONATION_ML }}" 
+                               value="350" required>
+                        <small class="form-text text-muted">
+                            Standard donation is between {{ config.MINIMUM_DONATION_ML }}ml and {{ config.MAXIMUM_DONATION_ML }}ml
+                        </small>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="health_check" required>
+                            <label class="custom-control-label" for="health_check">
+                                I confirm that I am in good health and eligible to donate blood today.
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-warning">
+                        <h5><i class="fas fa-exclamation-triangle mr-2"></i>Important Notice</h5>
+                        <ul class="mb-0">
+                            <li>You must wait at least 56 days between whole blood donations</li>
+                            <li>Ensure you have eaten and are well hydrated</li>
+                            <li>Bring a valid ID and list of current medications</li>
+                        </ul>
+                    </div>
+
+                    <button type="submit" class="btn btn-blood btn-lg btn-block">
+                        <i class="fas fa-heart mr-2"></i>Submit Donation
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card mt-4 shadow">
+            <div class="card-header bg-blood text-white">
+                <h4 class="mb-0">Pre-Donation Checklist</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5>Do:</h5>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-check text-success mr-2"></i>Get enough sleep</li>
+                            <li><i class="fas fa-check text-success mr-2"></i>Eat within 2 hours</li>
+                            <li><i class="fas fa-check text-success mr-2"></i>Drink plenty of water</li>
+                            <li><i class="fas fa-check text-success mr-2"></i>Bring ID and donor card</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Don't:</h5>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-times text-danger mr-2"></i>Skip meals</li>
+                            <li><i class="fas fa-times text-danger mr-2"></i>Exercise heavily</li>
+                            <li><i class="fas fa-times text-danger mr-2"></i>Consume alcohol</li>
+                            <li><i class="fas fa-times text-danger mr-2"></i>Smoke before donation</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

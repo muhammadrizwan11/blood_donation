@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Blood Donation System{% endblock %}</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f5e6d3;  /* Light Tan background */
+            min-height: 100vh;
+            color: #333333;
+        }
+        .navbar {
+            background: #d35400 !important;  /* Burnt Orange */
+            box-shadow: 0 4px 15px rgba(211, 84, 0, 0.2);
+            padding: 1rem 0;
+        }
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: #ffffff !important;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        .nav-link {
+            color: #ffffff !important;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            opacity: 0.9;
+        }
+        .nav-link:hover {
+            color: #ffffff !important;
+            opacity: 1;
+        }
+        .nav-link:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: #ffffff;
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover:after {
+            width: 100%;
+        }
+        .navbar-toggler {
+            border-color: rgba(163, 44, 44, 0.5);
+        }
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.9%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        }
+        .container {
+            max-width: 1200px;
+            background: #b4c957;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(211, 84, 0, 0.1);
+            padding: 20px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #be8f58;
+        }
+        .alert {
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: none;
+        }
+        .alert-success {
+            background: #94daa4;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .alert-danger {
+            background: #8f3c43;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .alert-warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+        }
+        .alert-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        .btn {
+            border-radius: 25px;
+            padding: 0.5rem 1.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            background: #d35400;  /* Burnt Orange */
+            border: none;
+            color: white;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(211, 84, 0, 0.3);
+            background: #a04000;  /* Darker Burnt Orange */
+        }
+        .footer {
+            background: #d35400 !important;  /* Burnt Orange */
+            color: rgb(88, 111, 175) !important;
+            padding: 2rem 0;
+            margin-top: auto;
+            box-shadow: 0 -4px 15px rgba(211, 84, 0, 0.1);
+        }
+        .footer span {
+            color: white !important;
+            font-weight: 500;
+        }
+        .card {
+            border-radius: 15px;
+            border: 1px solid #e8d5c0;
+            background: #c43f5c;
+            box-shadow: 0 8px 32px rgba(211, 84, 0, 0.1);
+            transition: all 0.3s ease;
+            color: #333333;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+        }
+        .card-header {
+            background: rgba(211, 84, 0, 0.1);  /* Light Burnt Orange */
+            border-bottom: 1px solid #e8d5c0;
+        }
+        .main-content {
+            min-height: calc(100vh - 180px);
+            padding: 2rem 0;
+        }
+        /* Form styling */
+        .form-control {
+            border-radius: 10px;
+            border: 1px solid #ced4da;
+            padding: 10px 15px;
+            transition: all 0.3s ease;
+            background: #ffffff;
+            color: #333333;
+        }
+        .form-control:focus {
+            box-shadow: 0 0 0 3px rgba(211, 84, 0, 0.2);  /* Burnt Orange */
+            border-color: #d35400;
+            background: #ffffff;
+            color: #333333;
+        }
+        /* Table styling */
+        .table {
+            background: #ffffff;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            color: #333333;
+        }
+        .table th {
+            background: rgba(211, 84, 0, 0.1);  /* Light Burnt Orange */
+            color: #333333;
+            font-weight: 600;
+            border-color: #e8d5c0;
+        }
+        .table td {
+            border-color: #e8d5c0;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d35400;  /* Burnt Orange */
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a04000;  /* Darker Burnt Orange */
+        }
+        /* Input placeholder color */
+        ::placeholder {
+            color: #6c757d !important;
+        }
+        /* Select dropdown styling */
+        select.form-control {
+            background: #ffffff;
+            color: #333333;
+        }
+        select.form-control option {
+            background: #ffffff;
+            color: #333333;
+        }
+    </style>
+</head>
+<body class="d-flex flex-column min-vh-100">
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('main.index') }}">
+                <i class="fas fa-heartbeat me-2"></i>Blood Donation System
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" title="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('main.index') }}">
+                            <i class="fas fa-home me-1"></i> Home
+                        </a>
+                    </li>
+                    {% if current_user.is_authenticated %}
+                        {% if current_user.is_admin %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('admin.dashboard') }}">
+                                <i class="fas fa-columns me-1"></i> Admin Dashboard
+                            </a>
+                        </li>
+                        {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('donor.donate') }}">
+                                <i class="fas fa-hand-holding-medical me-1"></i> Donate Blood
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('donor.request_blood') }}">
+                                <i class="fas fa-procedures me-1"></i> Request Blood
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('donor.my_donations') }}">
+                                <i class="fas fa-history me-1"></i> My Donations
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('donor.my_requests') }}">
+                                <i class="fas fa-clipboard-list me-1"></i> My Requests
+                            </a>
+                        </li>
+                        {% endif %}
+                    {% endif %}
+                </ul>
+                <ul class="navbar-nav">
+                    {% if current_user.is_authenticated %}
+                    <li class="nav-item">
+                        <span class="nav-link">
+                            <i class="fas fa-user me-1"></i> Welcome, {{ current_user.username }}
+                        </span>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('auth.logout') }}">
+                            <i class="fas fa-sign-out-alt me-1"></i> Logout
+                        </a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('auth.login') }}">
+                            <i class="fas fa-sign-in-alt me-1"></i> Login
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('auth.register') }}">
+                            <i class="fas fa-user-plus me-1"></i> Register
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Flash Messages -->
+    <div class="container mt-4">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        <i class="fas {% if category == 'success' %}fa-check-circle{% elif category == 'danger' %}fa-exclamation-circle{% elif category == 'warning' %}fa-exclamation-triangle{% else %}fa-info-circle{% endif %} me-2"></i>
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="container">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer mt-auto">
+        <div class="container text-center">
+            <div class="row">
+                <div class="col-md-12">
+                    <p class="mb-0">
+                        <i class="fas fa-heart text-white me-2"></i>
+                        © 2025 Blood Donation System. All rights reserved.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JavaScript -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

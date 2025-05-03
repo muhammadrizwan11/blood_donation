@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card shadow stat-card">
+            <div class="card-body text-center">
+                <i class="fas fa-users fa-3x text-blood mb-3"></i>
+                <h5 class="card-title">Total Users</h5>
+                <h2 class="mb-0">{{ stats.total_users }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card shadow stat-card">
+            <div class="card-body text-center">
+                <i class="fas fa-tint fa-3x text-blood mb-3"></i>
+                <h5 class="card-title">Total Donations</h5>
+                <h2 class="mb-0">{{ stats.total_donations }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card shadow stat-card">
+            <div class="card-body text-center">
+                <i class="fas fa-clipboard-list fa-3x text-blood mb-3"></i>
+                <h5 class="card-title">Total Requests</h5>
+                <h2 class="mb-0">{{ stats.total_requests }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card shadow stat-card">
+            <div class="card-body text-center">
+                <i class="fas fa-clock fa-3x text-blood mb-3"></i>
+                <h5 class="card-title">Pending Requests</h5>
+                <h2 class="mb-0">{{ stats.pending_requests }}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-blood text-white">
+                <h4 class="mb-0">Quick Actions</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <a href="{{ url_for('admin.manage_users') }}" class="btn btn-outline-blood btn-lg btn-block">
+                            <i class="fas fa-user-cog mr-2"></i>Manage Users
+                        </a>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <a href="{{ url_for('admin.manage_donations') }}" class="btn btn-outline-blood btn-lg btn-block">
+                            <i class="fas fa-tint mr-2"></i>Manage Donations
+                        </a>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <a href="{{ url_for('admin.manage_requests') }}" class="btn btn-outline-blood btn-lg btn-block">
+                            <i class="fas fa-clipboard-check mr-2"></i>Manage Requests
+                        </a>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <a href="{{ url_for('main.index') }}" class="btn btn-outline-blood btn-lg btn-block">
+                            <i class="fas fa-chart-bar mr-2"></i>View Reports
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow mt-4">
+            <div class="card-header bg-blood text-white">
+                <h4 class="mb-0">System Notifications</h4>
+            </div>
+            <div class="card-body p-0">
+                <div class="list-group list-group-flush">
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="mb-1">Low Blood Stock Alert</h6>
+                            <small class="text-muted">O- blood type running low</small>
+                        </div>
+                        <span class="badge badge-danger">Critical</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="mb-1">New Donation Requests</h6>
+                            <small class="text-muted">5 new requests need approval</small>
+                        </div>
+                        <span class="badge badge-warning">Pending</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="mb-1">System Update</h6>
+                            <small class="text-muted">New features available</small>
+                        </div>
+                        <span class="badge badge-info">Info</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card shadow">
+            <div class="card-header bg-blood text-white">
+                <h4 class="mb-0">Blood Inventory Status</h4>
+            </div>
+            <div class="card-body p-0">
+                <div class="list-group list-group-flush">
+                    <div class="list-group-item">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <strong>A+</strong>
+                            <span class="badge badge-success">Adequate</span>
+                        </div>
+                        <div class="progress" style="height: 5px;">
+                            <div class="progress-bar bg-success" style="width: 85%;"></div>
+                        </div>
+                    </div>
+                    <div class="list-group-item">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <strong>B+</strong>
+                            <span class="badge badge-warning">Low</span>
+                        </div>
+                        <div class="progress" style="height: 5px;">
+                            <div class="progress-bar bg-warning" style="width: 45%;"></div>
+                        </div>
+                    </div>
+                    <div class="list-group-item">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <strong>O-</strong>
+                            <span class="badge badge-danger">Critical</span>
+                        </div>
+                        <div class="progress" style="height: 5px;">
+                            <div class="progress-bar bg-danger" style="width: 15%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow mt-4">
+            <div class="card-header bg-blood text-white">
+                <h4 class="mb-0">Recent Activity</h4>
+            </div>
+            <div class="card-body p-0">
+                <div class="list-group list-group-flush">
+                    <div class="list-group-item">
+                        <small class="text-muted float-right">5 min ago</small>
+                        <h6 class="mb-1">New Blood Donation</h6>
+                        <small>User #1234 donated 350ml of A+ blood</small>
+                    </div>
+                    <div class="list-group-item">
+                        <small class="text-muted float-right">1 hour ago</small>
+                        <h6 class="mb-1">Request Approved</h6>
+                        <small>Emergency request #5678 was approved</small>
+                    </div>
+                    <div class="list-group-item">
+                        <small class="text-muted float-right">2 hours ago</small>
+                        <h6 class="mb-1">New User Registration</h6>
+                        <small>2 new donors registered in the system</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

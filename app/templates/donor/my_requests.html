@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block title %}My Blood Requests{% endblock %}
+
+{% block content %}
+<div class="card shadow">
+    <div class="card-header bg-blood text-white d-flex justify-content-between align-items-center">
+        <h3 class="mb-0">My Blood Requests</h3>
+        <a href="{{ url_for('donor.request_blood') }}" class="btn btn-light">
+            <i class="fas fa-plus mr-2"></i>New Request
+        </a>
+    </div>
+    <div class="card-body">
+        {% if requests %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Request Date</th>
+                            <th>Blood Type</th>
+                            <th>Quantity</th>
+                            <th>Urgency</th>
+                            <th>Status</th>
+                            <th>Hospital</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for request in requests %}
+                            <tr>
+                                <td>{{ request.request_date.strftime('%Y-%m-%d %H:%M') }}</td>
+                                <td>
+                                    <span class="badge badge-pill badge-danger">
+                                        {{ request.blood_type }}
+                                    </span>
+                                </td>
+                                <td>{{ request.quantity_ml }} ml</td>
+                                <td>
+                                    {% if request.urgency_level == 'high' %}
+                                        <span class="badge badge-danger">High Priority</span>
+                                    {% elif request.urgency_level == 'urgent' %}
+                                        <span class="badge badge-warning">Urgent</span>
+                                    {% else %}
+                                        <span class="badge badge-info">Normal</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if request.status == 'pending' %}
+                                        <span class="badge badge-warning">Pending</span>
+                                    {% elif request.status == 'approved' %}
+                                        <span class="badge badge-success">Approved</span>
+                                    {% elif request.status == 'rejected' %}
+                                        <span class="badge badge-danger">Rejected</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ request.hospital }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="text-center py-5">
+                <i class="fas fa-file-medical fa-4x text-muted mb-3"></i>
+                <h4 class="text-muted">No requests yet</h4>
+                <p class="mb-3">You haven't made any blood requests yet.</p>
+                <a href="{{ url_for('donor.request_blood') }}" class="btn btn-blood">
+                    <i class="fas fa-plus mr-2"></i>Create New Request
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+{% if requests %}
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <div class="card shadow">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Total Requests</h5>
+                    <h3 class="text-blood">{{ requests|length }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Approved</h5>
+                    <h3 class="text-success">
+                        {{ requests|selectattr('status', 'equalto', 'approved')|list|length }}
+                    </h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Pending</h5>
+                    <h3 class="text-warning">
+                        {{ requests|selectattr('status', 'equalto', 'pending')|list|length }}
+                    </h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow mt-4">
+        <div class="card-body">
+            <h5 class="card-title">Request Guidelines</h5>
+            <ul class="mb-0">
+                <li>Ensure all request details are accurate</li>
+                <li>Only request blood when medically necessary</li>
+                <li>Maintain communication with the blood bank</li>
+                <li>Update or cancel requests if no longer needed</li>
+            </ul>
+        </div>
+    </div>
+{% endif %}
+{% endblock %}

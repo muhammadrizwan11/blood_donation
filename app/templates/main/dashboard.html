@@ -1,0 +1,233 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+{% if current_user.role == 'admin' %}
+    <!-- Admin Dashboard -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="alert alert-info">
+                <i class="fas fa-user-shield mr-2"></i>
+                Welcome back, Administrator!
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-blood text-white">
+                    <h5 class="mb-0">Recent Donations</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="list-group list-group-flush">
+                        {% for donation in recent_donations %}
+                            <div class="list-group-item">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-1">{{ donation.donor.username }}</h6>
+                                        <small class="text-muted">
+                                            {{ donation.quantity_ml }}ml of {{ donation.blood_type }}
+                                        </small>
+                                    </div>
+                                    <span class="badge badge-pill badge-{% if donation.status == 'available' %}success{% elif donation.status == 'used' %}info{% else %}secondary{% endif %}">
+                                        {{ donation.status }}
+                                    </span>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-blood text-white">
+                    <h5 class="mb-0">Urgent Blood Requests</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="list-group list-group-flush">
+                        {% for request in urgent_requests %}
+                            <div class="list-group-item">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-1">{{ request.blood_type }} Needed</h6>
+                                        <small class="text-muted">
+                                            {{ request.quantity_ml }}ml at {{ request.hospital }}
+                                        </small>
+                                    </div>
+                                    <a href="{{ url_for('admin.manage_requests') }}#request{{ request.id }}" 
+                                       class="btn btn-sm btn-outline-danger">
+                                        Review
+                                    </a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-blood text-white">
+                    <h5 class="mb-0">Blood Inventory Status</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        {% for blood_type, count in blood_inventory.items() %}
+                            <div class="col-md-3 mb-3">
+                                <div class="card">
+                                    <div class="card-body text-center">
+                                        <h3 class="text-blood">{{ blood_type }}</h3>
+                                        <p class="display-4 mb-0">{{ count }}</p>
+                                        <small class="text-muted">units available</small>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow">
+                <div class="card-header bg-blood text-white">
+                    <h5 class="mb-0">Expiring Soon</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="list-group list-group-flush">
+                        {% for donation in expiring_soon %}
+                            {% set days_until_expiry = (donation.expiry_date - now).days %}
+                            <div class="list-group-item">
+                                <h6 class="mb-1">{{ donation.blood_type }}</h6>
+                                <small class="text-muted">
+                                    Expires in {{ days_until_expiry }} days
+                                    ({{ donation.quantity_ml }}ml available)
+                                </small>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% else %}
+    <!-- User Dashboard -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="alert alert-info">
+                <i class="fas fa-user mr-2"></i>
+                Welcome back, {{ current_user.username }}!
+                {% if current_user.is_available %}
+                    <a href="{{ url_for('donor.donate') }}" class="btn btn-outline-blood btn-sm float-right">
+                        Donate Now
+                    </a>
+                {% else %}
+                    <span class="badge badge-warning float-right">Not eligible to donate yet</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card shadow stat-card">
+                <div class="card-body text-center">
+                    <i class="fas fa-tint fa-3x text-blood mb-3"></i>
+                    <h5 class="card-title">Total Donations</h5>
+                    <p class="display-4 mb-0">{{ user_stats.total_donations }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow stat-card">
+                <div class="card-body text-center">
+                    <i class="fas fa-clock fa-3x text-blood mb-3"></i>
+                    <h5 class="card-title">Pending Requests</h5>
+                    <p class="display-4 mb-0">{{ user_stats.pending_requests }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow stat-card">
+                <div class="card-body text-center">
+                    <i class="fas fa-check-circle fa-3x text-blood mb-3"></i>
+                    <h5 class="card-title">Approved Requests</h5>
+                    <p class="display-4 mb-0">{{ user_stats.approved_requests }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-blood text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Recent Donations</h5>
+                    <a href="{{ url_for('donor.my_donations') }}" class="btn btn-sm btn-light">View All</a>
+                </div>
+                <div class="card-body p-0">
+                    <div class="list-group list-group-flush">
+                        {% for donation in recent_donations %}
+                            <div class="list-group-item">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-1">{{ donation.quantity_ml }}ml of {{ donation.blood_type }}</h6>
+                                        <small class="text-muted">
+                                            Donated on {{ donation.donation_date.strftime('%Y-%m-%d') }}
+                                        </small>
+                                    </div>
+                                    <span class="badge badge-pill badge-{% if donation.status == 'available' %}success{% elif donation.status == 'used' %}info{% else %}secondary{% endif %}">
+                                        {{ donation.status }}
+                                    </span>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="list-group-item text-center text-muted">
+                                No donations yet
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-blood text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Recent Requests</h5>
+                    <a href="{{ url_for('donor.my_requests') }}" class="btn btn-sm btn-light">View All</a>
+                </div>
+                <div class="card-body p-0">
+                    <div class="list-group list-group-flush">
+                        {% for request in my_requests %}
+                            <div class="list-group-item">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-1">{{ request.quantity_ml }}ml of {{ request.blood_type }}</h6>
+                                        <small class="text-muted">
+                                            Requested on {{ request.request_date.strftime('%Y-%m-%d') }}
+                                            for {{ request.hospital }}
+                                        </small>
+                                    </div>
+                                    <span class="badge badge-pill badge-{% if request.status == 'pending' %}warning{% elif request.status == 'approved' %}success{% else %}danger{% endif %}">
+                                        {{ request.status }}
+                                    </span>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="list-group-item text-center text-muted">
+                                No requests yet
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+{% endblock %}

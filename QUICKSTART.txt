@@ -1,0 +1,113 @@
+Quick Start Guide - Blood Donation System
+====================================
+
+1. Installation Steps
+-------------------
+a. System Prerequisites:
+   - Python 3.x installed
+   - pip package manager
+   - Git (optional)
+
+b. Setup Virtual Environment:
+   # Create virtual environment
+   python -m venv venv
+
+   # Activate virtual environment
+   # On Windows:
+   venv\Scripts\activate
+   # On Linux/Mac:
+   source venv/bin/activate
+
+c. Install Dependencies:
+   pip install -r requirements.txt
+
+2. Configuration
+--------------
+a. Database Setup:
+   python init_db.py
+   # This will create the database and admin user
+
+b. Default Admin Credentials:
+   Email: admin@blooddonation.com
+   Password: admin123
+   (Change these credentials after first login)
+
+c. Environment Variables (Optional):
+   Create a .env file with:
+   SECRET_KEY=your-secret-key
+   MAIL_SERVER=smtp.gmail.com
+   MAIL_PORT=587
+   MAIL_USERNAME=your-email@gmail.com
+   MAIL_PASSWORD=your-email-password
+
+3. Running the Application
+------------------------
+a. Start the Server:
+   python run.py
+   The application will be available at: http://localhost:5000
+
+b. First-time Setup:
+   1. Login as admin using default credentials
+   2. Change admin password
+   3. Configure email settings if needed
+   4. Start adding blood types and inventory
+
+4. Basic Usage
+------------
+a. For Administrators:
+   1. Login with admin credentials
+   2. Access admin dashboard
+   3. Manage users, donations, and requests
+   4. Monitor blood inventory
+   5. Process blood requests
+
+b. For Donors:
+   1. Register new account
+   2. Login to donor dashboard
+   3. Submit blood donations
+   4. Make blood requests
+   5. Track donation history
+
+5. Common Tasks
+-------------
+a. Adding New Users:
+   - Users can self-register
+   - Admins can create users from dashboard
+
+b. Managing Donations:
+   - Record new donations
+   - Track expiry dates
+   - Update donation status
+
+c. Processing Requests:
+   - Review incoming requests
+   - Match with available donations
+   - Update request status
+
+6. Troubleshooting
+----------------
+a. Database Issues:
+   - Delete blood_donation.db
+   - Run python init_db.py again
+
+b. Login Problems:
+   - Check correct email/password
+   - Reset password through admin
+
+c. Server Errors:
+   - Check error logs
+   - Verify all dependencies installed
+   - Ensure database exists
+
+7. Support
+---------
+For technical support:
+1. Check error logs
+2. Contact system administrator
+3. Email: support@blooddonation.com
+
+Remember to:
+- Regularly backup the database
+- Update admin password
+- Monitor blood inventory
+- Check expired donations daily
